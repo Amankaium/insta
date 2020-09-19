@@ -11,4 +11,4 @@ class ProfileAdmin(admin.ModelAdmin):
         "deleted"
     ]
 
-    fields = ["user"]
+    fields = ["user", "subscription"]
