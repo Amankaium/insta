@@ -51,6 +51,8 @@ class Profile(BaseModel):
         verbose_name="Подписка"
     )
 
+    
+
 
 
     
