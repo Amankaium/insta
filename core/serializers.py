@@ -28,6 +28,8 @@ class UserSerializer(serializers.ModelSerializer):
     subscription_count = serializers.SerializerMethodField()
     subscriber_count = serializers.SerializerMethodField()
     publication_count = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -38,7 +40,9 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "subscription_count",
             "subscriber_count",
-            "publication_count"
+            "publication_count",
+            "description",
+            "photo",
         ]
 
     def get_subscription_count(self, obj):
@@ -49,9 +53,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_publication_count(self, obj):
         return obj.publication.filter(deleted=False).count()
+    
+    def get_description(self, obj):
+        return obj.profile.description
+
+    def get_photo(self, obj):
+        return obj.profile.photo.url
 
 
 class UserListSerializer(serializers.ModelSerializer):
+    photo = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ["username", "first_name", "last_name"]
+        fields = ["username", "first_name", "last_name", "photo"]
+
+    def get_photo(self, obj):
+        return obj.profile.photo.url

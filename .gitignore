@@ -2,5 +2,6 @@ __pycache__
 insta/settings.py
 db.sqlite3
 venv
-media/
+media/*
+!/media/default_profile.jpg
 static/

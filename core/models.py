@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 
 class BaseModel(models.Model):
     name = models.CharField(
@@ -51,8 +50,13 @@ class Profile(BaseModel):
         verbose_name="Подписка"
     )
 
-    
+    description = models.TextField(
+        null=True, blank=True,
+        verbose_name="О себе"
+    )
 
-
-
+    photo = models.ImageField(
+        default="default_profile.jpg/",
+        upload_to="profiles"
+    )
     
