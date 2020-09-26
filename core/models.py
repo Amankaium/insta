@@ -59,4 +59,3 @@ class Profile(BaseModel):
         default="default_profile.jpg/",
         upload_to="profiles"
     )
-    
