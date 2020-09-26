@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.generics import ListAPIView
+from requests import get
 
 from .models import Publication
 from .serializers import *
@@ -22,7 +23,11 @@ def publication(request, pk):
     else:
         return Response({"message": "Not found"}, HTTP_404_NOT_FOUND)
     serializer = PublicationSerializer(pub)
-    return Response(serializer.data)
+    # response = get("https://api.openweathermap.org/data/2.5/weather?q=Bishkek,kgz&appid=11c0d3dc6093f7442898ee49d2430d20")
+    # response_data = response.json()
+    data = serializer.data
+    # data["temp"] = response_data["main"]["temp"] - 273.15
+    return Response(data)
 
 
 class UserPublicationList(ListAPIView):
@@ -32,4 +37,24 @@ class UserPublicationList(ListAPIView):
     def get_queryset(self):
         user = User.objects.get(username=self.kwargs["username"])
         publications = Publication.objects.filter(publisher=user)
+        return publications
+
+
+class FeedList(ListAPIView):
+    serializer_class = PublicationSerializer
+
+    def get_queryset(self):
+        user = User.objects.get(username=self.kwargs["username"])
+        # 1
+        # publications = Publication.objects.filter(publisher__in=user.profile.subscription.all())
+        
+        # 2
+        publications = Publication.objects.filter(publisher__subscriber__in=[user.profile])
+        
+        # 3
+        # publications = []
+        # for publisher in user.profile.subscription.all():
+        #     pubs = Publication.objects.filter(publisher=publisher)
+        #     publications += pubs
+
         return publications
