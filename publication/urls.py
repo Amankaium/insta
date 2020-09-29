@@ -8,7 +8,8 @@ router.register(r"publication", PublicationViewSet)
 urlpatterns = [
     path("detail/<int:pk>/", publication),
     path("<username>/", UserPublicationList.as_view()),
-    path("<username>/feed/", FeedList.as_view())
+    path("<username>/feed/", FeedList.as_view()),
+    path("<username>/explore/", ExploreView.as_view())
 ]
 
 urlpatterns += router.urls

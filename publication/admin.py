@@ -20,5 +20,15 @@ class PublicationAdmin(admin.ModelAdmin):
         "publisher",
     ]
 
+@admin.register(HashTag)
+class HashTagAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "publication_count",
+        "created"
+    ]
+
+    def publication_count(self, obj):
+        return obj.publication.count()
 
 

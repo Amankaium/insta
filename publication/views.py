@@ -7,7 +7,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.generics import ListAPIView
 from requests import get
 
-from .models import Publication
+from .models import *
 from .serializers import *
 
 
@@ -57,4 +57,14 @@ class FeedList(ListAPIView):
         #     pubs = Publication.objects.filter(publisher=publisher)
         #     publications += pubs
 
+        return publications
+
+
+class ExploreView(ListAPIView):
+    serializer_class = PublicationListSerializer
+
+    def get_queryset(self):
+        user = User.objects.get(username=self.kwargs["username"])
+        tags = HashTag.objects.filter(publication__publisher=user)
+        publications = Publication.objects.filter(hashtag__in=tags).exclude(publisher=user)
         return publications

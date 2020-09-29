@@ -21,3 +21,12 @@ class Publication(BaseModel):
         upload_to="publications",
         verbose_name="Картинка"
     )
+
+
+class HashTag(BaseModel):
+    publication = models.ManyToManyField(
+        to=Publication,
+        blank=True,
+        verbose_name="Хэштег",
+        related_name="hashtag"
+    )
