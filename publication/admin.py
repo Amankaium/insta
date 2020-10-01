@@ -9,6 +9,7 @@ class PublicationAdmin(admin.ModelAdmin):
         "image",
         "description",
         "publisher",
+        "likes",
         "created",
         "updated",
         "deleted"
@@ -18,7 +19,11 @@ class PublicationAdmin(admin.ModelAdmin):
         "image",
         "description",
         "publisher",
+        "likes",
     ]
+
+    def likes(self, obj):
+        return obj.like.count()
 
 @admin.register(HashTag)
 class HashTagAdmin(admin.ModelAdmin):
@@ -31,4 +36,4 @@ class HashTagAdmin(admin.ModelAdmin):
     def publication_count(self, obj):
         return obj.publication.count()
 
-
+admin.site.register(Like)

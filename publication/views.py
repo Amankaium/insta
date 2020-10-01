@@ -4,7 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 from requests import get
 
 from .models import *
@@ -68,3 +68,19 @@ class ExploreView(ListAPIView):
         tags = HashTag.objects.filter(publication__publisher=user)
         publications = Publication.objects.filter(hashtag__in=tags).exclude(publisher=user)
         return publications
+
+
+class LikeView(GenericAPIView):
+    serializer_class = LikeSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(id=self.kwargs["user_id"])
+        publication = Publication.objects.get(id=self.kwargs["publication_id"])
+        if Like.objects.filter(user=user, publication=publication).exists():
+            Like.objects.get(user=user, publication=publication).delete()
+            data = {"message": "like has been removed"}
+        else:
+            Like(user=user, publication=publication).save()
+            data = {"user": user.id, "publication": publication.id}
+        
+        return Response(data)
